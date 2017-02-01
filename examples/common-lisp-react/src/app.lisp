@@ -99,8 +99,7 @@
                                                        (return (not (@ todo completed))))
                                                       ((@ app "COMPLETED_TODOS")
                                                        (return (@ todo.completed)))
-                                                      (default t)))
-                                                  this)))
+                                                      (default t))))))
                 (todo-items (chain shown-todos (map (lambda (todo)
                                                       (panic:jsl
                                                        (*todo-item (create key (@ todo id)
@@ -111,8 +110,7 @@
                                                                            on-destroy (lambda () (destroy todo))
                                                                            on-edit    (lambda () (edit todo))
                                                                            on-save    (lambda (text) (save todo text))
-                                                                           on-cancel cancel))))
-                                                    this)))
+                                                                           on-cancel cancel)))))))
                 (active-todo-count (chain todos (reduce (lambda (accum todo)
                                                           (if (@ todo completed)
                                                               accum

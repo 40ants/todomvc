@@ -4,7 +4,7 @@ var app = app || {  };
       (SETF (@ APP ALL_TODOS) all
             (@ APP ACTIVE_TODOS) active
             (@ APP COMPLETED_TODOS) completed)
-      (DEFVAR *TODO-ITEM (@ APP *TODO-ITEM))
+      (DEFVAR *TODO-ITEM (CHAIN *REACT (CREATE-FACTORY (@ APP *TODO-ITEM))))
       (DEFVAR *TODO-FOOTER
         (CHAIN *REACT (CREATE-FACTORY (@ APP *TODO-FOOTER))))
       (LET* ((*ENTER-KEY* 13)
@@ -76,8 +76,7 @@ var app = app || {  };
                                   (RETURN (NOT (@ TODO COMPLETED))))
                                  ((@ APP COMPLETED_TODOS)
                                   (RETURN (@ TODO.COMPLETED)))
-                                 (DEFAULT T)))
-                              THIS)))
+                                 (DEFAULT T))))))
                            (TODO-ITEMS
                             (CHAIN SHOWN-TODOS
                              (MAP
@@ -90,8 +89,7 @@ var app = app || {  };
                                    ON-DESTROY (LAMBDA () (DESTROY TODO))
                                    ON-EDIT (LAMBDA () (EDIT TODO)) ON-SAVE
                                    (LAMBDA (TEXT) (SAVE TODO TEXT)) ON-CANCEL
-                                   CANCEL))))
-                              THIS)))
+                                   CANCEL)))))))
                            (ACTIVE-TODO-COUNT
                             (CHAIN TODOS
                              (REDUCE
@@ -137,7 +135,7 @@ var app = app || {  };
     app['ALL_TODOS'] = 'all';
     app['ACTIVE_TODOS'] = 'active';
     app['COMPLETED_TODOS'] = 'completed';
-    var TodoItem = app.TodoItem;
+    var TodoItem = React.createFactory(app.TodoItem);
     var TodoFooter = React.createFactory(app.TodoFooter);
     var ENTERKEY = 13;
     var model = new app.TodoModel('react-todos');
@@ -230,7 +228,7 @@ var app = app || {  };
             default:
                 return true;
             };
-        }, g593);
+        });
         var todoItems = shownTodos.map(function (todo) {
             return TodoItem({ key : todo.id,
                               todo : todo,
@@ -249,7 +247,7 @@ var app = app || {  };
             },
                               onCancel : g593.cancel
                             });
-        }, g593);
+        });
         var activeTodoCount = todos2.reduce(function (accum, todo) {
             return todo.completed ? accum : accum + 1;
         }, 0);
